@@ -80,6 +80,16 @@ inputs:
       value_options:
         - "true"
         - "false"
+      is_required: "true"
+  - delete: "true"
+    opts:
+      title: "Delete destination files"
+      summary: ""
+      description: |
+        Set true if you want to delete files existing in the destination but not in the source
+      value_options:
+      - "true"
+      - "false"
       is_required: true
   - aws_region: ""
     opts:
