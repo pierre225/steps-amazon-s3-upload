@@ -96,6 +96,7 @@ echo_details "* upload_bucket: $upload_bucket"
 echo_details "* upload_local_path: $upload_local_path"
 echo_details "* acl_control: $acl_control"
 echo_details "* set_acl_only_on_changed_objets: $set_acl_only_on_changed_objets"
+echo_details "* delete: $delete"
 echo_details "* aws_region: $aws_region"
 echo
 
@@ -109,6 +110,9 @@ validate_required_input_with_options "acl_control" $acl_control "${options[@]}"
 
 options=("true"  "no")
 validate_required_input_with_options "set_acl_only_on_changed_objets" $set_acl_only_on_changed_objets "${options[@]}"
+
+options=("true"  "false")
+validate_required_input_with_options "delete" $delete "${options[@]}"
 
 # this expansion is required for paths with ~
 #  more information: http://stackoverflow.com/questions/3963716/how-to-manually-expand-a-special-variable-ex-tilde-in-bash
@@ -139,9 +143,10 @@ s3_url="s3://${upload_bucket}"
 export AWS_ACCESS_KEY_ID="${access_key_id}"
 export AWS_SECRET_ACCESS_KEY="${secret_access_key}"
 
-# do a sync -> delete no longer existing objects
-echo_info "$ aws s3 sync ${expanded_upload_local_path} ${s3_url} --delete --acl ${aclcmd}"
-aws s3 sync "${expanded_upload_local_path}" "${s3_url}" --delete --acl ${aclcmd}
+# do a sync
+[[ "${delete}" == true ]] && params+=(--delete)
+echo_info "$ aws s3 sync ${expanded_upload_local_path} ${s3_url} --delete ${delete} --acl ${aclcmd}"
+aws s3 sync "${expanded_upload_local_path}" "${s3_url}" --acl ${aclcmd} "${params[@]}"
 
 if [[ "${set_acl_only_on_changed_objets}" != "true" ]] ; then
   echo_details "Setting ACL on every object, this can take some time..."
