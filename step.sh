@@ -112,7 +112,7 @@ options=("true"  "no")
 validate_required_input_with_options "set_acl_only_on_changed_objets" $set_acl_only_on_changed_objets "${options[@]}"
 
 options=("true"  "false")
-validate_required_input_with_options "delete" delete "${options[@]}"
+validate_required_input_with_options "delete" $delete "${options[@]}"
 
 # this expansion is required for paths with ~
 #  more information: http://stackoverflow.com/questions/3963716/how-to-manually-expand-a-special-variable-ex-tilde-in-bash
