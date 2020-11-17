@@ -143,11 +143,10 @@ s3_url="s3://${upload_bucket}"
 export AWS_ACCESS_KEY_ID="${access_key_id}"
 export AWS_SECRET_ACCESS_KEY="${secret_access_key}"
 
-# do a sync -> do not delete no longer existing objects
-params=()
+# do a sync
 [[ "${delete}" == true ]] && params+=(--delete)
-echo_info "$ aws s3 sync ${expanded_upload_local_path} ${s3_url} --acl ${aclcmd}"
-aws s3 sync "${expanded_upload_local_path}" "${s3_url}" --acl ${aclcmd}
+echo_info "$ aws s3 sync ${expanded_upload_local_path} ${s3_url} --delete ${delete} --acl ${aclcmd}"
+aws s3 sync "${expanded_upload_local_path}" "${s3_url}" --acl ${aclcmd} "${params[@]}"
 
 if [[ "${set_acl_only_on_changed_objets}" != "true" ]] ; then
   echo_details "Setting ACL on every object, this can take some time..."
