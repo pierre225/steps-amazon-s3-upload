@@ -25,6 +25,7 @@ workflows:
         - acl_control: public-read
         # - acl_control: private
         - set_acl_only_on_changed_objets: "true"
+        - delete: "true"
         - aws_region: $BUCKET_REGION
 
   # ----------------------------------------------------------------
